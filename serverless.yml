@@ -1,21 +1,31 @@
+org: jacas
+app: pieski
 service: flask-api
 
 provider:
   name: aws
   region: eu-west-2
   runtime: python3.8
-  profile: default
+  profile: serverless
+  environment:
+    AWS_KEY: ${param:AWS_KEY}
+    AWS_SECRET: ${param:AWS_SECRET}
   iam:
     role:
       statements:
-        - Effect: "Allow"
-          Action:
-            - 's3:ListBucket'
-          Resource: "arn:aws:s3:::pieski"
-        - Effect: "Allow"
-          Action:
-            - "s3:GetObject"
-          Resource: "arn:aws:s3:::pieski"
+      - Effect: "Allow"
+        Action:
+          - 's3:ListBucket'
+        Resource: "arn:aws:s3:::pieski"
+      - Effect: "Allow"
+        Action:
+          - "s3:GetObject"
+        Resource: "arn:aws:s3:::pieski"
+      - Effect: "Allow"
+        Action:
+          - "s3:PutObject"
+        Resource: "arn:aws:s3:::pieski"
+
 
 plugins:
   - serverless-wsgi
